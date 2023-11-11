@@ -1,0 +1,10 @@
+1. Build Shopify integration
+- has to access their database of products and designs
+- has to be able to display a customizable render (either 2d or 3d)
+- must have real-time price calculations
+2. Build customizable framework
+- users can customize clothing based off silhouette, frabric, and color.
+- Note not all frabric's would have a color so there will have to be a flag
+- Price would have to be updated real-time as user is making changes
+3. Allow the user to "try on" clothing
+4. Communicate price, customized options, and image back to Shopify

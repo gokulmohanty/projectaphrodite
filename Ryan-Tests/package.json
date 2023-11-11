@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "ar.js": "^2.2.2",
+    "fs": "^0.0.1-security",
+    "mime-types": "^2.1.35",
+    "node-fetch": "^3.3.2",
+    "react-scripts": "^3.0.1",
+    "three": "^0.158.0"
+  }
+}
