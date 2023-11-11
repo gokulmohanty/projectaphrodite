@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import ImageBank from './components/ImageBank';
-import TextureBank from './components/TextureBank';
-import Canvas from './components/Canvas';
-import ControlPanel from './components/ControlPanel';
+import ImageBank from './ImageBank';
+import TextureBank from './TextureBank';
+import Canvas from './Canvas';
+import ControlPanel from './ControlPanel';
 
 const Customize = () => {
 // This is a base64 encoded 1x1 white pixel image
