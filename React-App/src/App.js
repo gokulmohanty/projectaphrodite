@@ -10,6 +10,7 @@ import Client from 'shopify-buy';
 
 // import './App.css';
 import './tailwind.css'
+import Model from './components/Model';
 
 function App() {
 
@@ -81,6 +82,7 @@ function App() {
           <Route exact path="/customize" Component={Customize} />
           <Route exact path="/admin" Component={Admin} />
           <Route exact path="/checkout" Component={Checkout} />
+          <Route exact path="/model" Component={Model} />
           <Route exact path="/" Component={Test} />
         </Routes>
       </CheckoutContext.Provider>
