@@ -4,6 +4,7 @@ import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
 
+
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
   { name: 'Best Rating', href: '#', current: false },
@@ -11,13 +12,61 @@ const sortOptions = [
   { name: 'Price: Low to High', href: '#', current: false },
   { name: 'Price: High to Low', href: '#', current: false },
 ]
-const subCategories = [
-  { name: 'Totes', href: '#' },
-  { name: 'Backpacks', href: '#' },
-  { name: 'Travel Bags', href: '#' },
-  { name: 'Hip Bags', href: '#' },
-  { name: 'Laptop Sleeves', href: '#' },
-]
+
+const multiLevelDropdown = [
+  {
+    id: 'multi-level-menu',
+    name: 'Garment Type',
+    submenu: [
+      {
+        name: 'Blazers & Suits',
+        submenu: [
+          { name: 'Silhouette 1', href: '#' },
+          { name: 'Silhouette 2', href: '#' },
+          { name: 'Silhouette 3', href: '#' },
+          { name: 'Silhouette 4', href: '#' },
+        ],
+      },
+      {
+        name: 'Pants',
+        submenu: [
+          { name: 'Silhouette 1', href: '#' },
+          { name: 'Silhouette 2', href: '#' },
+          { name: 'Silhouette 3', href: '#' },
+          { name: 'Silhouette 4', href: '#' },
+        ],
+      },
+      {
+        name: 'T-Shirts',
+        submenu: [
+          { name: 'Silhouette 1', href: '#' },
+          { name: 'Silhouette 2', href: '#' },
+          { name: 'Silhouette 3', href: '#' },
+          { name: 'Silhouette 4', href: '#' },
+        ],
+      },
+      {
+        name: 'Shirts',
+        submenu: [
+          { name: 'Silhouette 1', href: '#' },
+          { name: 'Silhouette 2', href: '#' },
+          { name: 'Silhouette 3', href: '#' },
+          { name: 'Silhouette 4', href: '#' },
+        ],
+      },
+      {
+        name: 'Skirts',
+        submenu: [
+          { name: 'Silhouette 1', href: '#' },
+          { name: 'Silhouette 2', href: '#' },
+          { name: 'Silhouette 3', href: '#' },
+          { name: 'Silhouette 4', href: '#' },
+        ],
+      }
+    ],
+  },
+  // More items if needed...
+];
 const filters = [
   {
     id: 'color',
@@ -68,6 +117,7 @@ const Test = () => {
   return (
     <div className="bg-white">
       <div>
+        
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
           <Dialog as="div" className="relative z-40 lg:hidden" onClose={setMobileFiltersOpen}>
@@ -108,16 +158,54 @@ const Test = () => {
 
                   {/* Filters */}
                   <form className="mt-4 border-t border-gray-200">
-                    <h3 className="sr-only">Categories</h3>
-                    <ul role="list" className="px-2 py-3 font-medium text-gray-900">
-                      {subCategories.map((category) => (
-                        <li key={category.name}>
-                          <a href={category.href} className="block px-2 py-3">
-                            {category.name}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
+                    {multiLevelDropdown.map((item) => (
+                      <Disclosure as="div" key={item.id} className="border-t border-gray-200 py-6">
+                        {({ open }) => (
+                          <>
+                            <h3 className="-my-3 flow-root">
+                              <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                <span className="font-medium text-gray-900">{item.name}</span>
+                                <span className="ml-6 flex items-center">
+                                  {open ? (
+                                    <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                                  ) : (
+                                    <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                                  )}
+                                </span>
+                              </Disclosure.Button>
+                            </h3>
+                            <Disclosure.Panel className="pt-6">
+                              <div className="space-y-4">
+                                {item.submenu.map((submenuItem) => (
+                                  <Disclosure as="div" key={submenuItem.name}>
+                                    {({ open }) => (
+                                      <>
+                                        <Disclosure.Button className="flex w-full items-center justify-between text-gray-500 hover:text-gray-900">
+                                          <span>{submenuItem.name}</span>
+                                          <ChevronDownIcon className={`${open ? 'transform rotate-180' : ''} w-5 h-5`} />
+                                        </Disclosure.Button>
+                                        <Disclosure.Panel className="ml-4">
+                                          <ul>
+                                            {submenuItem.submenu.map((option) => (
+                                              <li key={option.name}>
+                                                <a href={option.href} className="block py-2 hover:bg-gray-50">
+                                                  {option.name}
+                                                </a>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </Disclosure.Panel>
+                                      </>
+                                    )}
+                                  </Disclosure>
+                                ))}
+                              </div>
+                            </Disclosure.Panel>
+                          </>
+                        )}
+                      </Disclosure>
+                    ))}
+
 
                     {filters.map((section) => (
                       <Disclosure as="div" key={section.id} className="border-t border-gray-200 px-4 py-6">
@@ -135,6 +223,7 @@ const Test = () => {
                                 </span>
                               </Disclosure.Button>
                             </h3>
+                            
                             <Disclosure.Panel className="pt-6">
                               <div className="space-y-6">
                                 {section.options.map((option, optionIdx) => (
@@ -239,14 +328,53 @@ const Test = () => {
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
               {/* Filters */}
               <form className="hidden lg:block">
-                <h3 className="sr-only">Categories</h3>
-                <ul role="list" className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
-                  {subCategories.map((category) => (
-                    <li key={category.name}>
-                      <a href={category.href}>{category.name}</a>
-                    </li>
-                  ))}
-                </ul>
+                {multiLevelDropdown.map((item) => (
+                      <Disclosure as="div" key={item.id} className="border-t border-b border-gray-200 py-6">
+                        {({ open }) => (
+                          <>
+                            <h3 className="-my-3 flow-root">
+                              <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                <span className="font-medium text-gray-900">{item.name}</span>
+                                <span className="ml-6 flex items-center">
+                                  {open ? (
+                                    <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                                  ) : (
+                                    <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                                  )}
+                                </span>
+                              </Disclosure.Button>
+                            </h3>
+                            <Disclosure.Panel className="pt-6">
+                              <div className="space-y-4">
+                                {item.submenu.map((submenuItem) => (
+                                  <Disclosure as="div" key={submenuItem.name}>
+                                    {({ open }) => (
+                                      <>
+                                        <Disclosure.Button className="flex w-full items-center justify-between text-gray-500 hover:text-gray-900">
+                                          <span>{submenuItem.name}</span>
+                                          <ChevronDownIcon className={`${open ? 'transform rotate-180' : ''} w-5 h-5`} />
+                                        </Disclosure.Button>
+                                        <Disclosure.Panel className="ml-4">
+                                          <ul>
+                                            {submenuItem.submenu.map((option) => (
+                                              <li key={option.name}>
+                                                <a href={option.href} className="block py-2 hover:bg-gray-50">
+                                                  {option.name}
+                                                </a>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </Disclosure.Panel>
+                                      </>
+                                    )}
+                                  </Disclosure>
+                                ))}
+                              </div>
+                            </Disclosure.Panel>
+                          </>
+                        )}
+                      </Disclosure>
+                    ))}
 
                 {filters.map((section) => (
                   <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
@@ -274,7 +402,7 @@ const Test = () => {
                                   defaultValue={option.value}
                                   type="radio"
                                   defaultChecked={option.checked}
-                                  className="h-4 w-4 rounded-well border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                  className="h-4 w-4 rounded-well` border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                 />
                                 <label
                                   htmlFor={`filter-${section.id}-${optionIdx}`}
