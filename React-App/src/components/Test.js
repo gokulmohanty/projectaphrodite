@@ -1,5 +1,7 @@
-import React from 'react';
-import { Fragment, useState } from 'react'
+import React, {Fragment, useContext, useState} from 'react';
+import createEmptyCart from '../utils/createEmptyCart';
+import CheckoutContext from '../context/checkout.context';
+import variantToLine from '../utils/variantToLine';
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
@@ -112,9 +114,105 @@ function classNames(...classes) {
 
 const Test = () => {
 
+  const {checkoutState, setCheckoutState} = useContext(CheckoutContext);
+
+  const [clothing, setClothing] = useState({"top": undefined, "bottom": undefined})
+
+  const [variantState, setVariantState] = useState({
+    "pos": undefined,
+    "silhouette": undefined,
+    "color": undefined,
+    "fabric": undefined,
+    "size": undefined
+  })
+
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
-  // const []
+  const addClothing = async() => {
+    if(!variantState.pos || !variantState.silhouette || !variantState.color || !variantState.fabric || !variantState.size){
+      return console.log("Not everything is filled out to add clothing.")
+    }
+    if(variantState.pos === "top"){
+      setClothing({...clothing, top : variantState})
+    }
+    else if(variantState.pos === "bottom") {
+      setClothing({...clothing, bottom : variantState})
+    }
+    else{
+      return console.log("Unknown POS on add clothing.")
+    }
+  }
+
+  const removeClothing = async(pos) => {
+    if(pos === "top"){
+      setClothing({...clothing, top : undefined})
+    }
+    else if(pos === "bottom") {
+      setClothing({...clothing, bottom : undefined})
+    }
+    else{
+      return console.log("Unknown POS on remove clothing.")
+    }
+  }
+
+  const cartInteraction = async(variantId, add) => {
+    if (checkoutState.checkout.id === null) {
+      setCheckoutState({
+        client: checkoutState.client,
+        checkout: await createEmptyCart(checkoutState.client)
+      })
+    }
+
+    if (add) {
+      var lineItemsToAdd = [
+        {
+          variantId: variantId,
+          quantity: 1,
+          //customAttributes: [{key: "MyKey", value: "MyValue"}]
+        }
+      ];
+    }
+    else {
+      var lineItemIdsToRemove = [
+        await variantToLine(checkoutState.checkout, variantId)
+      ];
+    }
+    try {
+      var checkout
+      if (add) {
+        checkout = await checkoutState.client.checkout.addLineItems(checkoutState.checkout.id, lineItemsToAdd)
+      }
+      else {
+        checkout = await checkoutState.client.checkout.removeLineItems(checkoutState.checkout.id, lineItemIdsToRemove)
+      }
+      console.log("Checkout successfully executed.")
+      setCheckoutState({
+        client: checkoutState.client,
+        checkout
+      })
+      // Check for errors
+      if (checkout.userErrors.length > 0) {
+        console.log("Errors!")
+        return
+      }
+    }
+    catch (err) {
+      console.log("Error on Checkout")
+      console.log(err.message)
+      for(let error of JSON.parse(err.message)) {
+        for(let field of error.field) {
+          if(field === "checkoutId") {
+            // This checkout is invalid, make a new one and try to checkout again
+            setCheckoutState({
+              client: checkoutState.client,
+              checkout: await createEmptyCart(checkoutState.client)
+            })
+            return await cartInteraction(variantId, add)
+          }
+        }
+      }
+    }
+  }
 
   return (
     <div className="bg-white">
