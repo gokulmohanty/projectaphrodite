@@ -78,10 +78,10 @@ function App() {
     <BrowserRouter>
       <CheckoutContext.Provider value={{checkoutState, setCheckoutState}}>
         <Routes>
-          <Route exact path="/" Component={Customize} />
+          <Route exact path="/customize" Component={Customize} />
           <Route exact path="/admin" Component={Admin} />
           <Route exact path="/checkout" Component={Checkout} />
-          <Route exact path="/test" Component={Test} />
+          <Route exact path="/" Component={Test} />
         </Routes>
       </CheckoutContext.Provider>
     </BrowserRouter>
