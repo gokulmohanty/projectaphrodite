@@ -358,7 +358,7 @@ const Test = () => {
                                         <Disclosure.Panel className="ml-4">
                                           <ul>
                                             {submenuItem.submenu.map((option) => (
-                                              <li key={option.name}>
+                                              <li key={option.name} onClick={() => UIInteract(item.name, option.index)}>
                                                 <a href={option.href} className="block py-2 hover:bg-gray-50">
                                                   {option.name}
                                                 </a>
@@ -398,7 +398,7 @@ const Test = () => {
                             <Disclosure.Panel className="pt-6">
                               <div className="space-y-6">
                                 {section.options.map((option, optionIdx) => (
-                                  <div key={option.value} className="flex items-center">
+                                  <div key={option.value} onClick={() => UIInteract(section.name, optionIdx)} className="flex items-center">
                                     <input
                                       id={`filter-mobile-${section.id}-${optionIdx}`}
                                       name={`${section.id}[]`}
@@ -594,14 +594,15 @@ const Test = () => {
               {/* Product grid */}
               <div className="lg:col-span-3">
                 <div key="Name" className="group relative">
+                  <div className="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 sm:h-64">
                   <Canvas selectedImage={indexOptions[clothingIndex][0]} selectedTexture={fabricOptions[fabricIndex]} selectedOutline={indexOptions[clothingIndex][1]} selectedColor={colorOptions[colorIndex]} />
-                  {/* <div className="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64"> */}
                     {/* Manna */}
-                    <div style={containerStyle}>
+                    {/* <div style={containerStyle}>
                       <img src={require("../images/Female.png")} alt="Mannequin" style={imageStyle} />
                       {bottomImage && <img src={bottomImage} alt="Bottom" style={imageStyle} />}
                       {topImage && <img src={topImage} alt="Top" style={imageStyle} />}
-                    </div>
+                    </div> */}
+                  </div>
                   {/* <h3 className="mt-6 text-sm text-gray-500">
                   <span className="absolute inset-0" />
                       Name
