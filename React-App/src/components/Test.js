@@ -3,6 +3,8 @@ import createEmptyCart from '../utils/createEmptyCart';
 import CheckoutContext from '../context/checkout.context';
 import variantToLine from '../utils/variantToLine';
 import getVariant from '../utils/getVariant';
+import Customize from './Customize';
+import Canvas from './Canvas';
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
@@ -72,6 +74,14 @@ const multiLevelDropdown = [
 ];
 const filters = [
   {
+    id: 'gender',
+    name: 'Gender',
+    options: [
+      { value: 'Male', label: 'Male', checked: false },
+      { value: 'female', label: 'Female', checked: false }
+    ],
+  },
+  {
     id: 'color',
     name: 'Color',
     options: [
@@ -117,7 +127,16 @@ const Test = () => {
 
   const {checkoutState, setCheckoutState} = useContext(CheckoutContext);
 
-  const [clothing, setClothing] = useState({"top": undefined, "bottom": undefined, "price": undefined})
+  //const [clothing, setClothing] = useState({"top": undefined, "bottom": undefined, "price": undefined})
+  const [mannequinImage, setMannequinImage] = useState(null);
+  const [topImage, setTopImage] = useState(null);
+  const [bottomImage, setBottomImage] = useState(null);
+
+  const [clothingIndex, setClothingIndex] = useState(null)
+  const [fabricIndex, setFabricIndex] = useState(null)
+
+  const [color, setColor] = useState(null)
+  const [size, setSize] = useState(null)
 
   const [variantState, setVariantState] = useState({
     "pos": undefined,
@@ -129,93 +148,132 @@ const Test = () => {
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
-  const addClothing = async() => {
-    if(!variantState.pos || !variantState.silhouette || !variantState.color || !variantState.fabric || !variantState.size){
-      return console.log("Not everything is filled out to add clothing.")
-    }
-    if(variantState.pos === "top"){
-      setClothing({...clothing, top : variantState})
-    }
-    else if(variantState.pos === "bottom") {
-      setClothing({...clothing, bottom : variantState})
-    }
-    else{
-      return console.log("Unknown POS on add clothing.")
-    }
-  }
+  // Styles for the mannequin container and images
+  const containerStyle = {
+    position: 'relative',
+    width: '150%', // Set width to 150% for scaling up
+    maxWidth: '600px', // Adjust this value based on your preference
+    margin: 'auto', // Center align the container
+  };
 
-  const removeClothing = async(pos) => {
-    if(pos === "top"){
-      setClothing({...clothing, top : undefined})
-    }
-    else if(pos === "bottom") {
-      setClothing({...clothing, bottom : undefined})
-    }
-    else{
-      return console.log("Unknown POS on remove clothing.")
-    }
-  }
+  const imageStyle = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%', // Image will scale with the container
+    height: 'auto', // Height will adjust automatically to maintain aspect ratio
+  };
+
+  const indexOptions = [
+    [require("../images/PNGs/blazer.png"), require("../images/Transparents/blazer_edge.png")],
+    [require("../images/PNGs/dress.png"), require("../images/Transparents/dress_edge.png")],
+    [require("../images/PNGs/Female1.png"), require("../images/Transparents/Female1_edge.png")],
+    [require("../images/PNGs/Female2.png"), require("../images/Transparents/Female2_edge.png")],
+    [require("../images/PNGs/Female3.png"), require("../images/Transparents/Female3_edge.png")],
+    [require("../images/PNGs/Female4.png"), require("../images/Transparents/Female4_edge.png")],
+    [require("../images/PNGs/Female5.png"), require("../images/Transparents/Female5_edge.png")],
+    [require("../images/PNGs/Male 3.png"), require("../images/Transparents/Male_3_edge.png")],
+    [require("../images/PNGs/Male2.png"), require("../images/Transparents/Male2_edge.png")],
+    [require("../images/PNGs/Male4.png"), require("../images/Transparents/Male4_edge.png")],
+    [require("../images/PNGs/miniskirt.png"), require("../images/Transparents/miniskirt_edge.png")],
+    [require("../images/PNGs/skirt.png"), require("../images/Transparents/skirt_edge.png")],
+    [require("../images/PNGs/split-dress.png"), require("../images/Transparents/split_dress_edge.png")]    
+  ]
+
+  const fabricOptions = [
+    require("../images/fabrics/2F76DBD1-17F3-4BA3-A311-441A75D73ECC.jpeg"),
+    require("../images/fabrics/40F0D756-F5F5-4C2F-9528-170ACBA135A1.jpeg"),
+    require("../images/fabrics/843A5D7D-4B09-4260-9846-B930F355755D.jpeg"),
+    require("../images/fabrics/69517F51-6E25-4015-9868-4ECF86C6F213_4_5005_c.jpeg")
+  ]
+
+  // const addClothing = async() => {
+  //   if(!variantState.pos || !variantState.silhouette || !variantState.color || !variantState.fabric || !variantState.size){
+  //     return console.log("Not everything is filled out to add clothing.")
+  //   }
+  //   if(variantState.pos === "top"){
+  //     setClothing({...clothing, top : variantState})
+  //   }
+  //   else if(variantState.pos === "bottom") {
+  //     setClothing({...clothing, bottom : variantState})
+  //   }
+  //   else{
+  //     return console.log("Unknown POS on add clothing.")
+  //   }
+  // }
+
+  // const removeClothing = async(pos) => {
+  //   if(pos === "top"){
+  //     setClothing({...clothing, top : undefined})
+  //   }
+  //   else if(pos === "bottom") {
+  //     setClothing({...clothing, bottom : undefined})
+  //   }
+  //   else{
+  //     return console.log("Unknown POS on remove clothing.")
+  //   }
+  // }
 
 
 
-  const cartInteraction = async(variantId, add) => {
-    if (checkoutState.checkout.id === null) {
-      setCheckoutState({
-        client: checkoutState.client,
-        checkout: await createEmptyCart(checkoutState.client)
-      })
-    }
+  // const cartInteraction = async(variantId, add) => {
+  //   if (checkoutState.checkout.id === null) {
+  //     setCheckoutState({
+  //       client: checkoutState.client,
+  //       checkout: await createEmptyCart(checkoutState.client)
+  //     })
+  //   }
 
-    if (add) {
-      var lineItemsToAdd = [
-        {
-          variantId: variantId,
-          quantity: 1,
-          //customAttributes: [{key: "MyKey", value: "MyValue"}]
-        }
-      ];
-    }
-    else {
-      var lineItemIdsToRemove = [
-        await variantToLine(checkoutState.checkout, variantId)
-      ];
-    }
-    try {
-      var checkout
-      if (add) {
-        checkout = await checkoutState.client.checkout.addLineItems(checkoutState.checkout.id, lineItemsToAdd)
-      }
-      else {
-        checkout = await checkoutState.client.checkout.removeLineItems(checkoutState.checkout.id, lineItemIdsToRemove)
-      }
-      console.log("Checkout successfully executed.")
-      setCheckoutState({
-        client: checkoutState.client,
-        checkout
-      })
-      // Check for errors
-      if (checkout.userErrors.length > 0) {
-        console.log("Errors!")
-        return
-      }
-    }
-    catch (err) {
-      console.log("Error on Checkout")
-      console.log(err.message)
-      for(let error of JSON.parse(err.message)) {
-        for(let field of error.field) {
-          if(field === "checkoutId") {
-            // This checkout is invalid, make a new one and try to checkout again
-            setCheckoutState({
-              client: checkoutState.client,
-              checkout: await createEmptyCart(checkoutState.client)
-            })
-            return await cartInteraction(variantId, add)
-          }
-        }
-      }
-    }
-  }
+  //   if (add) {
+  //     var lineItemsToAdd = [
+  //       {
+  //         variantId: variantId,
+  //         quantity: 1,
+  //         //customAttributes: [{key: "MyKey", value: "MyValue"}]
+  //       }
+  //     ];
+  //   }
+  //   else {
+  //     var lineItemIdsToRemove = [
+  //       await variantToLine(checkoutState.checkout, variantId)
+  //     ];
+  //   }
+  //   try {
+  //     var checkout
+  //     if (add) {
+  //       checkout = await checkoutState.client.checkout.addLineItems(checkoutState.checkout.id, lineItemsToAdd)
+  //     }
+  //     else {
+  //       checkout = await checkoutState.client.checkout.removeLineItems(checkoutState.checkout.id, lineItemIdsToRemove)
+  //     }
+  //     console.log("Checkout successfully executed.")
+  //     setCheckoutState({
+  //       client: checkoutState.client,
+  //       checkout
+  //     })
+  //     // Check for errors
+  //     if (checkout.userErrors.length > 0) {
+  //       console.log("Errors!")
+  //       return
+  //     }
+  //   }
+  //   catch (err) {
+  //     console.log("Error on Checkout")
+  //     console.log(err.message)
+  //     for(let error of JSON.parse(err.message)) {
+  //       for(let field of error.field) {
+  //         if(field === "checkoutId") {
+  //           // This checkout is invalid, make a new one and try to checkout again
+  //           setCheckoutState({
+  //             client: checkoutState.client,
+  //             checkout: await createEmptyCart(checkoutState.client)
+  //           })
+  //           return await cartInteraction(variantId, add)
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
   return (
     <div className="bg-white">
@@ -338,7 +396,7 @@ const Test = () => {
                                       type="radio"
                                       defaultChecked={option.checked}
                                       className="h-4 w-4 rounded-well border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                    />
+                                    onClick/>
                                     <label
                                       htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
                                       className="ml-3 min-w-0 flex-1 text-gray-500"
@@ -527,17 +585,17 @@ const Test = () => {
               <div className="lg:col-span-3">
                 <div key="Name" className="group relative">
                   <div className="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64">
-                    <img
-                      src={require("../images/fabrics/DSC01291.jpg")}
-                      alt="Alt"
-                      className="h-full w-full object-cover object-center"
-                    />
+                  {/* <Canvas selectedImage={selectedImage} selectedTexture={selectedTexture} selectedOutline={selectedOutline} selectedColor={selectedColor} /> */}
+                    {/* Manna */}
+                    <div style={containerStyle}>
+                      <img src={require("../images/Female.png")} alt="Mannequin" style={imageStyle} />
+                      {bottomImage && <img src={bottomImage} alt="Bottom" style={imageStyle} />}
+                      {topImage && <img src={topImage} alt="Top" style={imageStyle} />}
+                    </div>
                   </div>
                   <h3 className="mt-6 text-sm text-gray-500">
-                    <a href="">
-                      <span className="absolute inset-0" />
+                  <span className="absolute inset-0" />
                       Name
-                    </a>
                   </h3>
                   <p className="text-base font-semibold text-gray-900">Description</p>
                 </div>
