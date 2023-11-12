@@ -26,46 +26,46 @@ const multiLevelDropdown = [
       {
         name: 'Blazers & Suits',
         submenu: [
-          { name: 'Silhouette 1', href: '#' },
-          { name: 'Silhouette 2', href: '#' },
-          { name: 'Silhouette 3', href: '#' },
-          { name: 'Silhouette 4', href: '#' },
+          { name: 'Silhouette 1', href: '#', index: 0},
+          { name: 'Silhouette 2', href: '#', index: 1},
+          { name: 'Silhouette 3', href: '#', index: 2},
+          { name: 'Silhouette 4', href: '#', index: 3},
         ],
       },
       {
         name: 'Pants',
         submenu: [
-          { name: 'Silhouette 1', href: '#' },
-          { name: 'Silhouette 2', href: '#' },
-          { name: 'Silhouette 3', href: '#' },
-          { name: 'Silhouette 4', href: '#' },
+          { name: 'Silhouette 1', href: '#', index: 4},
+          { name: 'Silhouette 2', href: '#', index: 5},
+          { name: 'Silhouette 3', href: '#', index: 6},
+          { name: 'Silhouette 4', href: '#', index: 7},
         ],
       },
       {
         name: 'T-Shirts',
         submenu: [
-          { name: 'Silhouette 1', href: '#' },
-          { name: 'Silhouette 2', href: '#' },
-          { name: 'Silhouette 3', href: '#' },
-          { name: 'Silhouette 4', href: '#' },
+          { name: 'Silhouette 1', href: '#', index: 8},
+          { name: 'Silhouette 2', href: '#', index: 9},
+          { name: 'Silhouette 3', href: '#', index: 10},
+          { name: 'Silhouette 4', href: '#', index: 11},
         ],
       },
       {
         name: 'Shirts',
         submenu: [
-          { name: 'Silhouette 1', href: '#' },
-          { name: 'Silhouette 2', href: '#' },
-          { name: 'Silhouette 3', href: '#' },
-          { name: 'Silhouette 4', href: '#' },
+          { name: 'Silhouette 1', href: '#', index: 12},
+          { name: 'Silhouette 2', href: '#', index: 0},
+          { name: 'Silhouette 3', href: '#', index: 0},
+          { name: 'Silhouette 4', href: '#', index: 0},
         ],
       },
       {
         name: 'Skirts',
         submenu: [
-          { name: 'Silhouette 1', href: '#' },
-          { name: 'Silhouette 2', href: '#' },
-          { name: 'Silhouette 3', href: '#' },
-          { name: 'Silhouette 4', href: '#' },
+          { name: 'Silhouette 1', href: '#', index: 0},
+          { name: 'Silhouette 2', href: '#', index: 0},
+          { name: 'Silhouette 3', href: '#', index: 0},
+          { name: 'Silhouette 4', href: '#', index: 0},
         ],
       }
     ],
@@ -77,38 +77,36 @@ const filters = [
     id: 'gender',
     name: 'Gender',
     options: [
-      { value: 'Male', label: 'Male', checked: false },
-      { value: 'female', label: 'Female', checked: false }
+      { value: 'female', label: 'Female', checked: true },
+      { value: 'Male', label: 'Male', checked: false }
     ],
   },
   {
     id: 'color',
     name: 'Color',
     options: [
-      { value: 'white', label: 'White', checked: false },
-      { value: 'beige', label: 'Beige', checked: false },
-      { value: 'blue', label: 'Blue', checked: true },
-      { value: 'brown', label: 'Brown', checked: false },
+      { value: 'purple', label: 'Purple', checked: true },
+      { value: 'pink', label: 'Pink', checked: false },
+      { value: 'yellow', label: 'Yellow', checked: false },
       { value: 'green', label: 'Green', checked: false },
-      { value: 'purple', label: 'Purple', checked: false },
+      { value: 'blue', label: 'Blue', checked: false },
     ],
   },
   {
     id: 'category',
-    name: 'Category',
+    name: 'Fabric',
     options: [
-      { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-      { value: 'sale', label: 'Sale', checked: false },
-      { value: 'travel', label: 'Travel', checked: true },
-      { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false },
+      { value: 'fabric1', label: 'Fabric 1', checked: true },
+      { value: 'fabric2', label: 'Fabric 2', checked: false },
+      { value: 'fabric3', label: 'Fabric 3', checked: false },
+      { value: 'fabric4', label: 'Fabric 4', checked: false },
     ],
   },
   {
     id: 'size',
     name: 'Size',
     options: [
-      { value: '2l', label: '2L', checked: false },
+      { value: '2l', label: '2L', checked: true },
       { value: '6l', label: '6L', checked: false },
       { value: '12l', label: '12L', checked: false },
       { value: '18l', label: '18L', checked: false },
@@ -132,11 +130,10 @@ const Test = () => {
   const [topImage, setTopImage] = useState(null);
   const [bottomImage, setBottomImage] = useState(null);
 
-  const [clothingIndex, setClothingIndex] = useState(null)
-  const [fabricIndex, setFabricIndex] = useState(null)
+  const [clothingIndex, setClothingIndex] = useState(0)
+  const [fabricIndex, setFabricIndex] = useState(0)
 
-  const [color, setColor] = useState(null)
-  const [size, setSize] = useState(null)
+  const [colorIndex, setColorIndex] = useState(0)
 
   const [variantState, setVariantState] = useState({
     "pos": undefined,
@@ -186,6 +183,19 @@ const Test = () => {
     require("../images/fabrics/843A5D7D-4B09-4260-9846-B930F355755D.jpeg"),
     require("../images/fabrics/69517F51-6E25-4015-9868-4ECF86C6F213_4_5005_c.jpeg")
   ]
+
+  const colorOptions = ['#e8dff5', '#fce1e4', '#fcf4dd', '#ddedea', '#daeaf6'];
+  const UIInteract = async(title, index) => {
+    if(title === "Color") {
+      setColorIndex(index)
+    }
+    else if(title === "Fabric") {
+      setFabricIndex(index)
+    }
+    else if(title === "Garment Type") {
+      setClothingIndex(index)
+    }
+  }
 
   // const addClothing = async() => {
   //   if(!variantState.pos || !variantState.silhouette || !variantState.color || !variantState.fabric || !variantState.size){
@@ -420,7 +430,7 @@ const Test = () => {
 
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900">Khattoi Customization</h1>
 
             <div className="flex items-center">
               <Menu as="div" className="relative inline-block text-left">
@@ -518,7 +528,7 @@ const Test = () => {
                                         <Disclosure.Panel className="ml-4">
                                           <ul>
                                             {submenuItem.submenu.map((option) => (
-                                              <li key={option.name}>
+                                              <li key={option.name} onClick={() => UIInteract(item.name, option.index)}>
                                                 <a href={option.href} className="block py-2 hover:bg-gray-50">
                                                   {option.name}
                                                 </a>
@@ -556,7 +566,7 @@ const Test = () => {
                         <Disclosure.Panel className="pt-6">
                           <div className="space-y-4">
                             {section.options.map((option, optionIdx) => (
-                              <div key={option.value} className="flex items-center">
+                              <div key={option.value} onClick={() => UIInteract(section.name, optionIdx)} className="flex items-center">
                                 <input
                                   id={`filter-${section.id}-${optionIdx}`}
                                   name={`${section.id}[]`}
@@ -584,20 +594,19 @@ const Test = () => {
               {/* Product grid */}
               <div className="lg:col-span-3">
                 <div key="Name" className="group relative">
-                  <div className="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64">
-                  {/* <Canvas selectedImage={selectedImage} selectedTexture={selectedTexture} selectedOutline={selectedOutline} selectedColor={selectedColor} /> */}
+                  <Canvas selectedImage={indexOptions[clothingIndex][0]} selectedTexture={fabricOptions[fabricIndex]} selectedOutline={indexOptions[clothingIndex][1]} selectedColor={colorOptions[colorIndex]} />
+                  {/* <div className="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64"> */}
                     {/* Manna */}
                     <div style={containerStyle}>
                       <img src={require("../images/Female.png")} alt="Mannequin" style={imageStyle} />
                       {bottomImage && <img src={bottomImage} alt="Bottom" style={imageStyle} />}
                       {topImage && <img src={topImage} alt="Top" style={imageStyle} />}
                     </div>
-                  </div>
-                  <h3 className="mt-6 text-sm text-gray-500">
+                  {/* <h3 className="mt-6 text-sm text-gray-500">
                   <span className="absolute inset-0" />
                       Name
                   </h3>
-                  <p className="text-base font-semibold text-gray-900">Description</p>
+                  <p className="text-base font-semibold text-gray-900">Description</p> */}
                 </div>
               </div>
             </div>

@@ -6,8 +6,9 @@ const Canvas = ({ selectedImage, selectedTexture, selectedOutline, selectedColor
     const drawImage = (ctx, image, texture, outline) => {
         const img = new Image();
         img.src = image;
-
+        console.log(image)
         img.onload = () => {
+            console.log("HEREEE")
             const newWidth = img.naturalWidth * 0.7;
             const newHeight = img.naturalHeight * 0.7;
             canvasRef.current.width = newWidth;
@@ -95,7 +96,6 @@ const Canvas = ({ selectedImage, selectedTexture, selectedOutline, selectedColor
     useEffect(() => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
-
         if (selectedImage) {
             drawImage(context, selectedImage, selectedTexture, selectedOutline);
         }
