@@ -1,21 +1,16 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import ImageBank from './ImageBank';
 import TextureBank from './TextureBank';
+import OutlineBank from './OutlineBank';
 import Canvas from './Canvas';
 import ControlPanel from './ControlPanel';
 
 const Customize = () => {
-// This is a base64 encoded 1x1 white pixel image
-  // const whiteTexture = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAusB9VFOTwAAAABJRU5ErkJggg==';
-  // const lightGrayTexture = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8DwQACf8B/wj8Sw0AAAAASUVORK5CYII=';
-
-
-
   const [images, setImages] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
   const [textures, setTextures] = useState([]);
-  const [selectedTexture, setSelectedTexture] = useState();
-
+  const [outlines, setOutlines] = useState([]);
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedTexture, setSelectedTexture] = useState(null);
 
   const addImage = (newImage) => {
     setImages([...images, newImage]);
@@ -25,12 +20,28 @@ const Customize = () => {
     setTextures([...textures, newTexture]);
   };
 
+  const addOutline = (newOutline) => {
+    setOutlines([...outlines, newOutline]);
+  };
+
+  const onSelectImage = (index) => {
+    setSelectedIndex(index);
+  };
+
+  const onSelectTexture = (texture) => {
+    setSelectedTexture(texture);
+  };
+
+  const selectedImage = images[selectedIndex];
+  const selectedOutline = outlines[selectedIndex];
+
   return (
     <div>
-        <ImageBank images={images} onSelectImage={setSelectedImage} />
-        <TextureBank textures={textures} onSelectTexture={setSelectedTexture} />
-        <Canvas selectedImage={selectedImage} selectedTexture={selectedTexture} />
-        <ControlPanel onAddImage={addImage} onAddTexture={addTexture} />
+      <ImageBank images={images} onSelectImage={onSelectImage} selectedIndex={selectedIndex} />
+      <TextureBank textures={textures} onSelectTexture={onSelectTexture} />
+      <OutlineBank outlines={outlines} onSelectOutline={onSelectImage} selectedIndex={selectedIndex} />
+      <Canvas selectedImage={selectedImage} selectedTexture={selectedTexture} selectedOutline={selectedOutline} />
+      <ControlPanel onAddImage={addImage} onAddTexture={addTexture} onAddOutline={addOutline} />
     </div>
   );
 };

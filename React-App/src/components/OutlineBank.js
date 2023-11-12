@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ImageBank = ({ images, onSelectImage, selectedIndex }) => {
+const OutlineBank = ({ outlines, onSelectOutline, selectedIndex }) => {
   const imageContainerStyle = index => ({
     width: '150px',
     height: '150px',
@@ -8,7 +8,7 @@ const ImageBank = ({ images, onSelectImage, selectedIndex }) => {
     justifyContent: 'center',
     alignItems: 'center',
     margin: '10px',
-    border: index === selectedIndex ? '2px solid blue' : '1px solid #ccc', // Highlight selected image
+    border: index === selectedIndex ? '2px solid green' : '1px solid #ccc', // Highlight selected outline
     boxSizing: 'border-box',
     cursor: 'pointer',
     overflow: 'hidden'
@@ -22,11 +22,11 @@ const ImageBank = ({ images, onSelectImage, selectedIndex }) => {
 
   return (
     <div>
-      <h2>Image Bank</h2>
+      <h2>Outline Bank</h2>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {images.map((image, index) => (
-          <div key={index} style={imageContainerStyle(index)} onClick={() => onSelectImage(index)}>
-            <img src={image} alt={`object-${index}`} style={imageStyle} />
+        {outlines.map((outline, index) => (
+          <div key={index} style={imageContainerStyle(index)} onClick={() => onSelectOutline(index)}>
+            <img src={outline} alt={`outline-${index}`} style={imageStyle} />
           </div>
         ))}
       </div>
@@ -34,4 +34,4 @@ const ImageBank = ({ images, onSelectImage, selectedIndex }) => {
   );
 };
 
-export default ImageBank;
+export default OutlineBank;

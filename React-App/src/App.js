@@ -8,6 +8,7 @@ import CheckoutContext from './context/checkout.context';
 import createEmptyCart from './utils/createEmptyCart';
 import Client from 'shopify-buy';
 
+import './App.css';
 import './tailwind.css'
 
 function App() {
