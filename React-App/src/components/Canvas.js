@@ -46,8 +46,8 @@ const Canvas = ({ selectedImage, selectedTexture }) => {
     };
 
     const tileTexture = (textureImg) => {
-        const scaledWidth = textureImg.width * 0.5;
-        const scaledHeight = textureImg.height * 0.5;
+        const scaledWidth = textureImg.width * 0.25;
+        const scaledHeight = textureImg.height * 0.25;
         const tempCanvas = document.createElement('canvas');
         const tempCtx = tempCanvas.getContext('2d');
 
