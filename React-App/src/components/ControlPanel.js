@@ -1,3 +1,5 @@
+import React from 'react';
+
 const ControlPanel = ({ onAddImage, onAddTexture, onAddOutline }) => {
   const handleImageUpload = (event, uploadType) => {
     const file = event.target.files[0];

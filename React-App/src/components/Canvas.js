@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 
-const Canvas = ({ selectedImage, selectedTexture, selectedOutline }) => {
+const Canvas = ({ selectedImage, selectedTexture, selectedOutline, selectedColor }) => {
     const canvasRef = useRef(null);
 
     const drawImage = (ctx, image, texture, outline) => {
@@ -8,11 +8,8 @@ const Canvas = ({ selectedImage, selectedTexture, selectedOutline }) => {
         img.src = image;
 
         img.onload = () => {
-            // Resize the image to 70% of its original size while maintaining aspect ratio
             const newWidth = img.naturalWidth * 0.7;
             const newHeight = img.naturalHeight * 0.7;
-
-            // Set the canvas dimensions
             canvasRef.current.width = newWidth;
             canvasRef.current.height = newHeight;
 
@@ -47,7 +44,14 @@ const Canvas = ({ selectedImage, selectedTexture, selectedOutline }) => {
             ctx.globalAlpha = 0.85; // Adjust for faintness
             ctx.globalCompositeOperation = 'source-atop';
             ctx.drawImage(textureToUse, 0, 0, width, height);
-            ctx.globalAlpha = 1.0; // Reset alpha
+
+            // Apply color filter to texture
+            if (selectedColor) {
+                applyColorFilter(ctx, selectedColor, width, height);
+            }
+
+            // Reset alpha and composite operation
+            ctx.globalAlpha = 1.0;
             ctx.globalCompositeOperation = 'source-over';
         };
     };
@@ -78,6 +82,16 @@ const Canvas = ({ selectedImage, selectedTexture, selectedOutline }) => {
         return tempCanvas;
     };
 
+    const applyColorFilter = (ctx, color, width, height) => {
+        if (color) {
+            // Adjust the saturation level here if needed
+            ctx.globalCompositeOperation = 'hue';
+            ctx.fillStyle = color;
+            ctx.fillRect(0, 0, width, height);
+            ctx.globalCompositeOperation = 'source-over';
+        }
+    };
+
     useEffect(() => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
@@ -85,7 +99,7 @@ const Canvas = ({ selectedImage, selectedTexture, selectedOutline }) => {
         if (selectedImage) {
             drawImage(context, selectedImage, selectedTexture, selectedOutline);
         }
-    }, [selectedImage, selectedTexture, selectedOutline]);
+    }, [selectedImage, selectedTexture, selectedOutline, selectedColor]);
 
     return <canvas ref={canvasRef} />;
 };

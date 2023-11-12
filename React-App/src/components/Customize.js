@@ -4,6 +4,7 @@ import TextureBank from './TextureBank';
 import OutlineBank from './OutlineBank';
 import Canvas from './Canvas';
 import ControlPanel from './ControlPanel';
+import ColorBank from './ColorBank';
 
 const Customize = () => {
   const [images, setImages] = useState([]);
@@ -11,6 +12,8 @@ const Customize = () => {
   const [outlines, setOutlines] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [selectedTexture, setSelectedTexture] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const colors = ['#ff0000', '#00ff00', '#0000ff', /* other hex color codes */];
 
   const addImage = (newImage) => {
     setImages([...images, newImage]);
@@ -32,6 +35,10 @@ const Customize = () => {
     setSelectedTexture(texture);
   };
 
+  const onSelectColor = (color) => {
+    setSelectedColor(color);
+  };
+
   const selectedImage = images[selectedIndex];
   const selectedOutline = outlines[selectedIndex];
 
@@ -40,8 +47,9 @@ const Customize = () => {
       <ImageBank images={images} onSelectImage={onSelectImage} selectedIndex={selectedIndex} />
       <TextureBank textures={textures} onSelectTexture={onSelectTexture} />
       <OutlineBank outlines={outlines} onSelectOutline={onSelectImage} selectedIndex={selectedIndex} />
-      <Canvas selectedImage={selectedImage} selectedTexture={selectedTexture} selectedOutline={selectedOutline} />
+      <Canvas selectedImage={selectedImage} selectedTexture={selectedTexture} selectedOutline={selectedOutline} selectedColor={selectedColor} />
       <ControlPanel onAddImage={addImage} onAddTexture={addTexture} onAddOutline={addOutline} />
+      <ColorBank colors={colors} onSelectColor={onSelectColor} selectedColor={selectedColor} />
     </div>
   );
 };
