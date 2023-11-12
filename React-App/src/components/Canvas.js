@@ -47,6 +47,7 @@ const Canvas = ({ selectedImage, selectedTexture, selectedOutline, selectedColor
 
             // Apply color filter to texture
             if (selectedColor) {
+                // Apply color filter using the same composite operation
                 applyColorFilter(ctx, selectedColor, width, height);
             }
 
@@ -84,11 +85,10 @@ const Canvas = ({ selectedImage, selectedTexture, selectedOutline, selectedColor
 
     const applyColorFilter = (ctx, color, width, height) => {
         if (color) {
-            // Adjust the saturation level here if needed
-            ctx.globalCompositeOperation = 'hue';
+            ctx.globalAlpha = 0.4; // Adjust the opacity for the shading effect
             ctx.fillStyle = color;
             ctx.fillRect(0, 0, width, height);
-            ctx.globalCompositeOperation = 'source-over';
+            ctx.globalAlpha = 1.0; // Reset the opacity
         }
     };
 

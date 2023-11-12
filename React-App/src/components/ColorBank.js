@@ -1,6 +1,8 @@
 import React from 'react';
 
-const ColorBank = ({ colors, onSelectColor, selectedColor }) => {
+const ColorBank = ({ onSelectColor, selectedColor }) => {
+    const colors = ['#e8dff5', '#fce1e4', '#fcf4dd', '#ddedea', '#daeaf6'];
+
   const colorStyle = color => ({
     margin: '10px',
     width: '50px',
