@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 
-const Canvas = ({ selectedImage, selectedTexture }) => {
+const Canvas = ({ selectedImage, selectedTexture, selectedOutline }) => {
     const canvasRef = useRef(null);
 
-    const drawImage = (ctx, image, texture) => {
+    const drawImage = (ctx, image, texture, outline) => {
         const img = new Image();
         img.src = image;
 
@@ -19,40 +19,55 @@ const Canvas = ({ selectedImage, selectedTexture }) => {
             // Draw the original image
             ctx.drawImage(img, 0, 0, newWidth, newHeight);
 
+            // Apply texture if available
             if (texture) {
-                const textureImg = new Image();
-                textureImg.src = texture;
-                textureImg.onload = () => {
-                    let textureToUse = textureImg;
+                applyTexture(ctx, texture, newWidth, newHeight);
+            }
 
-                    // Tile the texture if it's smaller than 1500x1500
-                    if (textureImg.width < 1500 || textureImg.height < 1500) {
-                        textureToUse = tileTexture(textureImg);
-                    }
-
-                    // Apply the (tiled) texture
-                    ctx.globalAlpha = 0.85; // Adjust for faintness
-                    ctx.globalCompositeOperation = 'source-atop';
-                    ctx.drawImage(textureToUse, 0, 0, newWidth, newHeight);
-                    ctx.globalAlpha = 1.0; // Reset alpha
-                    ctx.globalCompositeOperation = 'source-over';
-
-                    enhanceAndOverlayOutlines(ctx, img);
-                };
-            } else {
-                enhanceAndOverlayOutlines(ctx, img);
+            // Overlay outline image if available
+            if (outline) {
+                overlayOutline(ctx, outline, newWidth, newHeight);
             }
         };
     };
 
-    const tileTexture = (textureImg) => {
+    const applyTexture = (ctx, texture, width, height) => {
+        const textureImg = new Image();
+        textureImg.src = texture;
+
+        textureImg.onload = () => {
+            let textureToUse = textureImg;
+
+            // Tile the texture if it's smaller than 1500x1500
+            if (textureImg.width < 1500 || textureImg.height < 1500) {
+                textureToUse = tileTexture(textureImg, width, height);
+            }
+
+            // Apply the (tiled) texture
+            ctx.globalAlpha = 0.85; // Adjust for faintness
+            ctx.globalCompositeOperation = 'source-atop';
+            ctx.drawImage(textureToUse, 0, 0, width, height);
+            ctx.globalAlpha = 1.0; // Reset alpha
+            ctx.globalCompositeOperation = 'source-over';
+        };
+    };
+
+    const overlayOutline = (ctx, outline, width, height) => {
+        const outlineImg = new Image();
+        outlineImg.src = outline;
+        outlineImg.onload = () => {
+            ctx.drawImage(outlineImg, 0, 0, width, height);
+        };
+    };
+
+    const tileTexture = (textureImg, width, height) => {
         const scaledWidth = textureImg.width * 0.25;
         const scaledHeight = textureImg.height * 0.25;
         const tempCanvas = document.createElement('canvas');
         const tempCtx = tempCanvas.getContext('2d');
 
-        tempCanvas.width = canvasRef.current.width;
-        tempCanvas.height = canvasRef.current.height;
+        tempCanvas.width = width;
+        tempCanvas.height = height;
 
         for (let y = 0; y < tempCanvas.height; y += scaledHeight) {
             for (let x = 0; x < tempCanvas.width; x += scaledWidth) {
@@ -63,53 +78,14 @@ const Canvas = ({ selectedImage, selectedTexture }) => {
         return tempCanvas;
     };
 
-    const enhanceAndOverlayOutlines = (ctx, img) => {
-        const width = canvasRef.current.width;
-        const height = canvasRef.current.height;
-        const offscreenCanvas = document.createElement('canvas');
-        offscreenCanvas.width = width;
-        offscreenCanvas.height = height;
-        const offCtx = offscreenCanvas.getContext('2d');
-
-        offCtx.drawImage(img, 0, 0, width, height);
-
-        const imageData = offCtx.getImageData(0, 0, width, height);
-        const data = imageData.data;
-
-        // Increase the threshold to be more lenient on what is considered dark/black
-        const threshold = 100; // Adjust this value as needed
-
-        for (let i = 0; i < data.length; i += 4) {
-            const brightness = 0.34 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2];
-
-            if (brightness < threshold) {
-                // Enhance and darken outlines
-                data[i] = 0;     // Red
-                data[i + 1] = 0; // Green
-                data[i + 2] = 0; // Blue
-                // Apply a thickness effect
-                if (i > 4 && data[i - 4 + 3] > 0) {
-                    data[i - 4] = 0;     // Red
-                    data[i - 4 + 1] = 0; // Green
-                    data[i - 4 + 2] = 0; // Blue
-                }
-            } else {
-                data[i + 3] = 0; // Alpha (make transparent)
-            }
-        }
-
-        offCtx.putImageData(imageData, 0, 0);
-        ctx.drawImage(offscreenCanvas, 0, 0, width, height);
-    };
-
     useEffect(() => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
 
         if (selectedImage) {
-            drawImage(context, selectedImage, selectedTexture);
+            drawImage(context, selectedImage, selectedTexture, selectedOutline);
         }
-    }, [selectedImage, selectedTexture]);
+    }, [selectedImage, selectedTexture, selectedOutline]);
 
     return <canvas ref={canvasRef} />;
 };

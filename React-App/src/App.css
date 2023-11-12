@@ -1,0 +1,93 @@
+/* General Body Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    color: #fff;
+    text-align: center;
+  }
+  
+  /* Header and Titles */
+  h1, h2, h3 {
+    font-weight: bold;
+  }
+  
+  /* Canvas and Image Containers */
+  .canvas-container, .image-container {
+    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  
+  .canvas-container:hover, .image-container:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Control Panel Styling */
+  .control-panel {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    margin: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+  }
+  
+  .control-panel input[type="file"] {
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    background: #fff;
+    color: #333;
+    margin-top: 10px;
+  }
+  
+  /* Image Bank, Texture Bank, Outline Bank */
+  .bank-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px;
+  }
+  
+  .image-item, .texture-item, .outline-item {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .image-item:hover, .texture-item:hover, .outline-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* Button Styling */
+  button {
+    background-color: #4caf50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  
+  /* Additional Interactive Elements */
+  .interactive-element {
+    animation: rotate 2s linear infinite;
+  }
+  
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  

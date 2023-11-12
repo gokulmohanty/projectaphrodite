@@ -5,6 +5,8 @@ import Admin from './components/Admin';
 import Test from './components/Test';
 import Checkout from './components/Checkout';
 import CheckoutContext from './context/checkout.context';
+import './App.css';
+
 // import Client from 'shopify-buy';
 
 function App() {
@@ -13,17 +15,6 @@ function App() {
   const storefrontAccessToken = "a315d6f383a61800bf0af3e9dce49d4a"
 
   const [checkoutInfo, setCheckoutInfo] = useState({});
-
-  // useEffect(() => {
-  //   let tempWS;
-  //   const initialize = async () => {
-  //       let token = localStorage.getItem("token");
-  //       if (!token){
-  //           localStorage.setItem('token', '');
-  //           token = '';
-  //       }
-  //   }
-  // }, []);
 
   return (
     <BrowserRouter>
