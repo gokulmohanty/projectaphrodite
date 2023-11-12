@@ -1,8 +1,7 @@
-import React from 'react';
-import Client from 'shopify-buy';
-
-const domain = "project-aphrodite.myshopify.com"
-const storefrontAccessToken = "a315d6f383a61800bf0af3e9dce49d4a"
+import React, {useContext} from 'react';
+import createEmptyCart from '../utils/createEmptyCart';
+import CheckoutContext from '../context/checkout.context';
+import variantToLine from '../utils/variantToLine';
 
 var variantId;
 variantId = "gid://shopify/ProductVariant/4743735630264"
@@ -11,37 +10,21 @@ variantId = "gid://shopify/ProductVariant/47437356335414"
 
 const Checkout = () => {
 
-  // Initializing a client to return content in the store's primary language
-  const client = Client.buildClient({
-    domain: domain,
-    storefrontAccessToken: storefrontAccessToken
-  });
-
-  // Initializing a client to return translated content
-  Client.buildClient({
-    domain: domain,
-    storefrontAccessToken: storefrontAccessToken,
-    language: 'en-EN'
-  });
-
-  const createEmptyCart = async() => {
-    const checkout = await client.checkout.create()
-    console.log(checkout)
-    localStorage.setItem('checkoutId', checkout.id);
-    return checkout.id
-  }
+  const {checkoutState, setCheckoutState} = useContext(CheckoutContext);
 
   const cartInteraction = async(variantId, add) => {
     // Test code
-    const products = await client.product.fetchAll();
+    const products = await checkoutState.client.product.fetchAll();
     for (let i = 0; i < 2 + 1; i++){
       console.log(products[i])
     }
 
 
-    var checkoutId = localStorage.getItem("checkoutId")
-    if (checkoutId === null) {
-      checkoutId = await createEmptyCart()
+    if (checkoutState.checkout.id === null) {
+      setCheckoutState({
+        client: checkoutState.client,
+        checkout: await createEmptyCart(checkoutState.client)
+      })
     }
 
     if (add) {
@@ -55,19 +38,22 @@ const Checkout = () => {
     }
     else {
       var lineItemIdsToRemove = [
-        'gid://shopify/CheckoutLineItem/194677729198640?checkout=e3bd71f7248c806f33725a53e33931ef'
+        await variantToLine(checkoutState.checkout, variantId)
       ];
     }
     try {
       var checkout
       if (add) {
-        checkout = await client.checkout.addLineItems(checkoutId, lineItemsToAdd)
+        checkout = await checkoutState.client.checkout.addLineItems(checkoutState.checkout.id, lineItemsToAdd)
       }
       else {
-        checkout = await client.checkout.removeLineItems(checkoutId, lineItemIdsToRemove)
+        checkout = await checkoutState.client.checkout.removeLineItems(checkoutState.checkout.id, lineItemIdsToRemove)
       }
       console.log("Checkout successfully executed.")
-      console.log(checkout)
+      setCheckoutState({
+        client: checkoutState.client,
+        checkout
+      })
       // Check for errors
       if (checkout.userErrors.length > 0) {
         console.log("Errors!")
@@ -81,7 +67,10 @@ const Checkout = () => {
         for(let field of error.field) {
           if(field === "checkoutId") {
             // This checkout is invalid, make a new one and try to checkout again
-            await createEmptyCart()
+            setCheckoutState({
+              client: checkoutState.client,
+              checkout: await createEmptyCart(checkoutState.client)
+            })
             return await cartInteraction(variantId, add)
           }
         }
