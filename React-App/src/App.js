@@ -8,6 +8,8 @@ import CheckoutContext from './context/checkout.context';
 import createEmptyCart from './utils/createEmptyCart';
 import Client from 'shopify-buy';
 
+import './tailwind.css'
+
 function App() {
 
   const domain = "project-aphrodite.myshopify.com"
