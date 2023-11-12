@@ -6,15 +6,15 @@ import ControlPanel from './ControlPanel';
 
 const Customize = () => {
 // This is a base64 encoded 1x1 white pixel image
-  const whiteTexture = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAusB9VFOTwAAAABJRU5ErkJggg==';
-  const lightGrayTexture = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8DwQACf8B/wj8Sw0AAAAASUVORK5CYII=';
+  // const whiteTexture = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAusB9VFOTwAAAABJRU5ErkJggg==';
+  // const lightGrayTexture = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8DwQACf8B/wj8Sw0AAAAASUVORK5CYII=';
 
 
 
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [textures, setTextures] = useState([lightGrayTexture]);
-  const [selectedTexture, setSelectedTexture] = useState(lightGrayTexture);
+  const [textures, setTextures] = useState([]);
+  const [selectedTexture, setSelectedTexture] = useState();
 
 
   const addImage = (newImage) => {
