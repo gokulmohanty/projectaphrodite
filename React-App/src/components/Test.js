@@ -2,6 +2,7 @@ import React, {Fragment, useContext, useState} from 'react';
 import createEmptyCart from '../utils/createEmptyCart';
 import CheckoutContext from '../context/checkout.context';
 import variantToLine from '../utils/variantToLine';
+import getVariant from '../utils/getVariant';
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
@@ -116,14 +117,14 @@ const Test = () => {
 
   const {checkoutState, setCheckoutState} = useContext(CheckoutContext);
 
-  const [clothing, setClothing] = useState({"top": undefined, "bottom": undefined})
+  const [clothing, setClothing] = useState({"top": undefined, "bottom": undefined, "price": undefined})
 
   const [variantState, setVariantState] = useState({
     "pos": undefined,
     "silhouette": undefined,
     "color": undefined,
     "fabric": undefined,
-    "size": undefined
+    "size": undefined,
   })
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
@@ -154,6 +155,8 @@ const Test = () => {
       return console.log("Unknown POS on remove clothing.")
     }
   }
+
+
 
   const cartInteraction = async(variantId, add) => {
     if (checkoutState.checkout.id === null) {

@@ -13,11 +13,11 @@ const Checkout = () => {
   const {checkoutState, setCheckoutState} = useContext(CheckoutContext);
 
   const cartInteraction = async(variantId, add) => {
-    // // Test code
-    // const products = await checkoutState.client.product.fetchAll();
-    // for (let i = 0; i < 2 + 1; i++){
-    //   console.log(products[i])
-    // }
+    // Test code
+    const products = await checkoutState.client.product.fetchAll();
+    for (let i = 0; i < 2 + 1; i++){
+      console.log(products[i])
+    }
 
 
     if (checkoutState.checkout.id === null) {
